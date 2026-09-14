@@ -20,12 +20,32 @@ Contiene:
     claude plugin marketplace add livenbit/claude-kit
     claude plugin install livenbit@livenbit-kit
 
+Il marketplace va indicato come `livenbit/claude-kit`, **mai** come URL
+completo. Passando `https://github.com/livenbit/claude-kit` il comando
+fallisce con "its network source differs from the one declared for it in
+settings": stesso nome, ma per la CLI e' una sorgente di tipo diverso.
+
 Installare sempre a scope utente (il default). Mai `--scope project`: il
 riferimento a questo marketplace privato finirebbe committato nel repo del
 cliente.
 
-Non serve aggiornare a mano: il plugin non dichiara una versione, quindi
-ogni push su `main` arriva a tutti come aggiornamento.
+## Aggiornamento
+
+Il plugin non dichiara una versione, quindi la sua versione e' il commit SHA
+da cui e' stato installato. **Resta fermo a quello**: i push su `main` non
+arrivano da soli. Per prendere l'ultima versione:
+
+    claude plugin update livenbit@livenbit-kit
+
+poi riavvia Claude Code, altrimenti la modifica non ha effetto.
+
+Attenzione a non confondere i due comandi: `claude plugin marketplace update
+livenbit-kit` aggiorna solo la cache del marketplace e lascia il plugin dov'e'.
+Quello che sposta la versione installata e' `claude plugin update`.
+
+Per sapere a che commit sei:
+
+    claude plugin list
 
 ## Uso
 

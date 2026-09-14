@@ -85,6 +85,6 @@ Per il **Piano 4**, riporta il canone concordato che hai ricevuto. Mai la dicitu
 
 Scrivi `contratti/<slug>-<AAAA-MM-GG>.md`, poi convertilo:
 
-    python3 "${CLAUDE_PLUGIN_ROOT}"/scripts/md-to-docx.py contratti/<file>.md contratti/<file>.docx
+    bash "${CLAUDE_PLUGIN_ROOT}"/scripts/md-to-docx.sh contratti/<file>.md contratti/<file>.docx
 
 Chiudi elencando: il percorso dei due file, i punti che hai dovuto assumere, e in modo esplicito **le clausole da far verificare a un legale la prima volta** — la 13 e il blocco delle approvazioni specifiche su tutte. Se `check-infra.sh` non e' uscito 0, dillo come prima riga della risposta. Nel Piano 1 di' invece, sempre in apertura, che la localizzazione dei dati non e' garantita perche' gli account sono del cliente.

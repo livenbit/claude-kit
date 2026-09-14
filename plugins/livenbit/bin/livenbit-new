@@ -23,6 +23,11 @@ EOF
 }
 
 [ $# -ge 1 ] || { usage; exit 1; }
+
+# Prima di tutto: altrimenti `livenbit-new --help` finisce dentro SLUG e il
+# comando muore con "Manca --client" invece di mostrare l'aiuto.
+case "$1" in -h|--help) usage; exit 0 ;; esac
+
 SLUG="$1"; shift
 
 while [ $# -gt 0 ]; do
