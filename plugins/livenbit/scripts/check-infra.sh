@@ -22,7 +22,13 @@ fi
 
 command -v jq >/dev/null || { echo "NON VERIFICABILE: manca jq"; exit 1; }
 
-RILEVATO=$(jq -r '.rilevato_il // empty' "$F")
+# Su Windows jq.exe scrive CRLF. Il ritorno a capo finirebbe dentro le
+# variabili e romperebbe il confronto delle region: con il carattere in coda
+# "fra1" non e' piu' "fra1", e una region europea verrebbe data per extra-UE.
+# Ogni lettura del JSON passa da qui.
+j() { jq "$@" | tr -d '\015'; }
+
+RILEVATO=$(j -r '.rilevato_il // empty' "$F")
 if [ -z "$RILEVATO" ]; then
   echo "NON VERIFICABILE: $F non riporta la data del rilevamento"
   exit 1
@@ -55,14 +61,14 @@ while IFS=$'\t' read -r ruolo servizio region; do
   else
     printf '  %-10s %-12s %s  FUORI UE\n' "$ruolo" "$servizio" "$region"; ESITO=1
   fi
-done < <(jq -r '
+done < <(j -r '
   [ {r:"database", s:.database.servizio,  g:.database.region},
     {r:"hosting",  s:.hosting.servizio,   g:.hosting.region_funzioni} ]
   | .[] | [.r, .s, (.g // "null")] | @tsv' "$F")
 
 echo
 echo "Societa' terze con cui transitano dati personali (sede legale):"
-jq -r '.servizi_terzi[]? | "  - \(.nome) — \(.sede) — \(.finalita)"' "$F"
+j -r '.servizi_terzi[]? | "  - \(.nome) — \(.sede) — \(.finalita)"' "$F"
 
 echo
 if [ "$ESITO" -eq 0 ]; then
